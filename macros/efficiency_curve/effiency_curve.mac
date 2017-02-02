@@ -1,0 +1,27 @@
+
+/control/verbose 0
+/run/verbose 1
+/vis/verbose 0
+/tracking/verbose 0
+
+
+/control/execute macros/efficiency_curve/100keV.mac
+/control/execute macros/efficiency_curve/200keV.mac
+/control/execute macros/efficiency_curve/300keV.mac
+/control/execute macros/efficiency_curve/400keV.mac
+/control/execute macros/efficiency_curve/500keV.mac
+/control/execute macros/efficiency_curve/600keV.mac
+/control/execute macros/efficiency_curve/700keV.mac
+/control/execute macros/efficiency_curve/800keV.mac
+/control/execute macros/efficiency_curve/900keV.mac
+/control/execute macros/efficiency_curve/1000keV.mac
+/control/execute macros/efficiency_curve/1100keV.mac
+/control/execute macros/efficiency_curve/1200keV.mac
+/control/execute macros/efficiency_curve/1300keV.mac
+/control/execute macros/efficiency_curve/1400keV.mac
+/control/execute macros/efficiency_curve/1500keV.mac
+/control/execute macros/efficiency_curve/1600keV.mac
+/control/execute macros/efficiency_curve/1700keV.mac
+/control/execute macros/efficiency_curve/1800keV.mac
+/control/execute macros/efficiency_curve/1900keV.mac
+

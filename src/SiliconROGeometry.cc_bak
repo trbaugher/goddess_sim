@@ -1,0 +1,106 @@
+#include "G4RunManager.hh"
+#include "SiliconROGeometry.hh"
+#include "DummySD.hh"
+#include "DetectorConstruction.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4PVReplica.hh"
+#include "G4SDManager.hh"
+#include "G4Box.hh"
+#include "G4ThreeVector.hh"
+#include "G4Material.hh"
+
+SiliconROGeometry::SiliconROGeometry()
+  : G4VReadOutGeometry()
+{}
+
+SiliconROGeometry::SiliconROGeometry()
+  : G4VReadOutGeometry(aString)
+{
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  Detector = (DetectorConstruction*)(RunManager->GetUserDetectorConstruction());
+}
+
+SiliconROGeometry::~SiliconROGeometry()
+{
+}
+
+G4VPhysicalVolume* SiliconROGeometry::Build()
+{
+  // Dummy material to define readout geometry
+  G4Material* dummyMat = new G4Material(name="dummyMat", 1.0, 1.0*g/mole, 1.0*g/cm3);
+
+  // build readout world
+  G4double WorldSize = Detector->GetWorldSize();
+
+  G4Box* ROWorld_solid = new G4Box("ROWorld", WorldSize/2, WorldSize/2, WorldSize/2);
+  G4LogicalVolume* ROWorld_logical = new G4LogicalVolume(ROWorld_solid, dummyMat, "ROWorld");
+  G4PVPhysicalPlacement* ROWorld_physical = new G4PVPlacement(0, G4ThreeVector(), "ROWorld", ROWorld_logical, 0, false, 0);
+
+  // detectors
+
+
+  // +y-axis is up, +z-axis is beam direction, +x axis is beam-left
+  G4int i;
+  G4int det_num = 0;// continuous detector numbering index
+  G4ThreeVector position(0.0, sil_E_radius, -sil_z_offset);
+  G4RotationMatrix rotation = G4RotationMatrix();
+  G4Transform3D transform = G4Transform3D(rotation, position); 
+  G4double phi = 2*3.14159/n_sil_per_ring;
+
+  // create silicon 1000 um E detectors
+  sil_E_solid = new G4Box("sil_E", sil_width/2, sil_E_thick/2, sil_length/2);
+  sil_E_logical = new G4LogicalVolume(sil_E_solid, dummyMat, "sil_E");
+
+  // create dE detectors
+  sil_dE_solid = new G4Box("sil_dE", sil_width/2, sil_dE_thick/2, sil_length/2);
+  sil_dE_logical = new G4LogicalVolume(sil_dE_solid, dummyMat, "sil_dE");
+
+
+  // backward E detectors (det_num=0-11 clockwise from top (y-axis))
+  for (i = 0; i < n_sil_per_ring; i++) {
+    sil_E_physical = new G4PVPlacement(transform, sil_E_logical, "sil_E", world_logical, false, det_num);
+    rotation.rotateZ(phi);
+    position.rotateZ(phi);
+    transform = G4Transform3D(rotation, position);
+    det_num++;
+  }
+
+  // forward E detectors (det_num=12-23 clockwise from top (y-axis))
+  position.setZ(sil_z_offset);
+  transform = G4Transform3D(rotation, position);
+  for (i = 0; i < n_sil_per_ring; i++) {
+    sil_E_physical = new G4PVPlacement(transform, sil_E_logical, "sil_E", world_logical, false, det_num);
+    rotation.rotateZ(phi);
+    position.rotateZ(phi);
+    transform = G4Transform3D(rotation, position);
+    det_num++;
+  }
+
+  // backward dE detectors (det_num 100-111 clockwise from top (y-axis)
+  det_num = 100;
+  position.setY(sil_dE_radius);
+  position.setZ(-sil_z_offset);
+  transform = G4Transform3D(rotation, position);
+  for (i = 0; i < n_sil_per_ring; i++) {
+    sil_dE_physical = new G4PVPlacement(transform, sil_dE_logical, "sil_dE", world_logical, false, det_num);
+    rotation.rotateZ(phi);
+    position.rotateZ(phi);
+    transform = G4Transform3D(rotation, position);
+    det_num++;
+  }
+
+  // forward dE detectors (det_num 112-123 clockwise from top (y-axis)
+  position.setZ(sil_z_offset);
+  transform = G4Transform3D(rotation, position);
+  for (i = 0; i < n_sil_per_ring; i++) {
+    sil_dE_physical = new G4PVPlacement(transform, sil_dE_logical, "sil_dE", world_logical, false, det_num);
+    rotation.rotateZ(phi);
+    position.rotateZ(phi);
+    transform = G4Transform3D(rotation, position);
+    det_num++;
+  }
+    

@@ -1,0 +1,44 @@
+####################################################
+# GEANT4 VCGLIB/CAD INTERFACE - basic example
+#
+# File:      vis.mac
+#
+# Author:    Christopher M Poole,
+# Email:     mail@christopherpoole.net
+#
+# Date:      20th March, 2011
+####################################################
+
+/control/verbose 0
+/run/verbose 1
+/vis/verbose 0
+/tracking/verbose 0
+
+
+#/gps/source/intensity 1.0
+#/gps/particle proton
+#/gps/ene/type Gauss
+#/gps/ene/mono 5. MeV
+#/gps/ene/sigma .1 MeV
+#/gps/pos/centre 0. 0. 0. cm
+##/gps/direction 1 0 0
+##/gps/ang/type cos
+##/gps/ang/maxtheta 15. deg
+#/gps/ang/type iso
+
+/gps/source/add 1.0
+/gps/particle gamma
+/gps/energy 0.5 MeV
+/gps/pos/centre 0. 0. 20. cm
+#/gps/direction 1 0 0
+#/gps/ang/type cos
+#/gps/ang/maxtheta 15. deg
+/gps/ang/type iso
+
+/gps/source/list
+
+#/gps/source/multiplevertex true
+
+/run/FileName out/degrader_position/degrader_position_20cm.out
+/run/beamOn 100000
+

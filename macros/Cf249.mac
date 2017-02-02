@@ -1,0 +1,9 @@
+/tracking/verbose 0
+/gps/particle ion
+/gps/ion 98 249
+/gps/energy 0.0 eV
+/grdm/nucleusLimits 98 249 98 249
+/gps/pos/confine bubble_physical
+/run/FileName Cf249.out
+/run/beamOn 1000000
+

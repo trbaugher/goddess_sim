@@ -1,0 +1,7 @@
+/gps/particle gamma
+/gps/pos/centre 0. 0. 0. cm
+/gps/ang/type iso
+/gps/energy 300 keV
+/gps/List
+/run/FileName out/efficiency_curve/300keV.out
+/control/execute macros/efficiency_curve/beamon.mac
